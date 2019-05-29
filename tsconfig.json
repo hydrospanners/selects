@@ -1,0 +1,28 @@
+{
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts",
+    ],
+    "compilerOptions": {
+        "declaration": false,
+        "noImplicitAny": false,
+        "module": "ES6",
+        "moduleResolution": "node",
+        "lib": [
+            "esnext",
+            "dom"
+        ],
+        "target": "esnext",
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "inlineSources": true,
+        "allowSyntheticDefaultImports": true,
+        "jsx": "react",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+    }
+}
