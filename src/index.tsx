@@ -1,71 +1,98 @@
-import React, { useState } from 'react';
+import { response } from 'express';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import React, { useEffect, useState } from 'react';
 import { render } from 'react-dom';
-import { Formik, Form, ErrorMessage, Field } from 'formik'
 import * as Yup from 'yup';
-
-class Side {
-    name: string;
-    characters: string[];
-}
-
-const darkSide = new Side();
-darkSide.name = 'dark side';
-darkSide.characters = ['Palpatine', 'Vader', 'Maul'];
-const lightSide = new Side();
-lightSide.name = 'light side';
-lightSide.characters = ['Obi-Wan', 'Yoda', 'Luke'];
 
 
 const App = () => {
-    const sides = [darkSide, lightSide];
+    const [tags, setTags] = useState([]);
+    const [posts, setPosts] = useState([]);
+    const [post, setPost] = useState();
 
-    const [selectedSide, setSelectedSide] = useState();
-    const [selectedCharacter, setSelectedCharacter] = useState('');
+    const [selectedTag, setSelectedTag] = useState();
+    const [selectedPost, setSelectedPost] = useState();
     const validationSchema = Yup.object().shape({
-        side: Yup.string().required(),
-        character: Yup.string().required()
+        tag: Yup.string().required(),
+        post: Yup.string().required()
     })
-    return (
-        <Formik
-            onSubmit={(values) => { console.log(values) }}
-            initialValues={{ side: '', character: '' }}
-            validationSchema={validationSchema}
-            render={props => (
+    useEffect(() => {
+        // on mount load from the api
+        fetch('/api/tag')
+            .then(response => response.json())
+            .then(({ data }: { data: { data: any } }) => {
+                setTags(data.data)
+            })
+    }, [])
+    useEffect(() => {
+        if (selectedTag != null) {
+            fetch('api/tag/' + selectedTag.slug)
+                .then(response => response.json())
+                .then(({ data }: { data: { data: any } }) => {
+                    setPosts(data.data);
+                })
+        }
+    }, [selectedTag])
 
-                <Form>
-                    <Field name="side"
-                        component="select"
-                        placeholder="pick one side"
-                        onChange={e => {
-                            setSelectedSide(sides.find(side => side.name == e.target.value))
-                            setSelectedCharacter(null);
-                            props.handleChange(e);
-                        }}
-                    >
-                        <option>chose a side</option>
-                        {sides.map(side => <option key={`side:${side.name}`} value={side.name}>{side.name}</option>)}
-                    </Field>
-                    <ErrorMessage name="side" />
-                    {selectedSide != null && <div>
-                        <Field name="character" component="select" onChange={e => {
-                            setSelectedCharacter(e.target.value);
-                            props.handleChange(e);
-                        }}>
-                            <option value="">chose a character</option>
-                            {sides.find(side => side == selectedSide).characters.map(character => <option key={`character:${character}`} value={character}>{character}</option>)}
+    const getPost = ({ post }) => {
+        fetch('api/post/' + post)
+            .then(response => response.json())
+            .then(({ data }: { data: { data: any } }) => {
+                setPost(data.data);
+            })
+    }
+
+    return (
+        <>
+            <Formik
+                onSubmit={getPost}
+                initialValues={{
+                    tag: '',
+                    post: ''
+                }}
+                validationSchema={validationSchema}
+                render={props => (
+                    <Form>
+                        <Field name="tag"
+                            component="select"
+                            placeholder="pick one side"
+                            onChange={e => {
+                                setSelectedTag(tags.find(category => category.slug == e.target.value))
+                                setSelectedPost(null);
+                                props.handleChange(e);
+                            }}
+                        >
+                            <option>chose a tag</option>
+                            {tags.map(category => <option key={`tag:${category.slug}`} value={category.slug}>{category.name}</option>)}
                         </Field>
-                        <ErrorMessage name="character" />
-                    </div>}
-                    {selectedSide != null && <div>
-                        {selectedSide.name}
-                    </div>}
-                    {selectedCharacter != '' && <div>
-                        {selectedCharacter}
-                    </div>}
-                    <button type="submit">Save</button>
-                </Form>
-            )}
-        />
+                        <ErrorMessage name="tag" />
+                        {selectedTag && <div>
+                            <Field name="post" component="select" onChange={e => {
+                                setSelectedPost(posts.find(post => post.slug == e.target.value));
+                                props.handleChange(e);
+                            }}>
+                                <option value="">chose a post</option>
+                                {posts.map(post => <option key={`post:${post.slug}`} value={post.slug}>{post.title}</option>)}
+                            </Field>
+                            <ErrorMessage name="post" />
+                        </div>}
+                        <button disabled={!props.isValid} type="submit">get</button>
+                    </Form>
+                )}
+            />
+            {selectedTag && <div>
+                {selectedTag.name}
+            </div>}
+            {selectedPost && <div>
+                {selectedPost.title}
+            </div>}
+            {post && <div>
+                <div>
+                    {post.title}
+                </div>
+                <div>{post.body}</div>
+            </div>}
+        </>
     )
 }
 
