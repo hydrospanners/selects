@@ -9,7 +9,7 @@ export const ViewHistory = observer(() => {
     const store = useContext<ViewStore>(ViewStoreContext);
     return (
         <StyledEmptyWindow>
-            {store.viewHistory.reverse().map((h, i) => <p key={`${i}:${h.tag}/${h.post}`} >{`${h.tag}/${h.post}`}</p>)}
+            {store.viewHistory.slice(0).reverse().map((h, i) => <p key={`${i}:${h.tag}/${h.post}`} >{`${h.tag}/${h.post}`}</p>)}
         </StyledEmptyWindow>
     );
 });
