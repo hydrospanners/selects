@@ -1,16 +1,10 @@
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require("path");
-const ManifestPlugin = require('webpack-manifest-plugin');
-const webpack = require('webpack');
-// const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const tsNameof = require("ts-nameof");
 
-// WebpackNotifierPlugin = require('webpack-notifier');
 
 const _DIST_FOLDER = "/dist";
-const _JS = "/js/";
-const _CSS = "../css/";
-// let _FILE_NAME = "[name].[contenthash].js";
 let _FILE_NAME = "[name].js";
 
 module.exports = {
@@ -21,7 +15,7 @@ module.exports = {
         filename: _FILE_NAME,
         chunkFilename: _FILE_NAME,
         path: path.join(__dirname, _DIST_FOLDER),
-        publicPath: '/', //path.join(_DIST_FOLDER, 'static')
+        publicPath: '/',
         pathinfo: false
 
     },
@@ -55,9 +49,6 @@ module.exports = {
     },
 
     resolve: {
-        alias: {
-            // '@Stylesheets': path.join(__dirname, 'Content/Stylesheets')
-        },
         extensions: ['.js', '.jsx', '.ts', '.tsx']
     },
     plugins: [
