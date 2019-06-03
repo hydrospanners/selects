@@ -4,20 +4,22 @@ import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 
-import { PostStore } from '../store/PostStore';
-import { TagStore } from '../store/TagStore';
-import viewStoreContext, { ViewStore } from '../store/ViewStore';
-import { Window } from './Window'
+import { Window } from '../../components/Window';
+import { PostStore } from './../store/PostStore';
+import viewStoreContext, { ViewStore } from './../store/SelectViewStore';
+import { TagStore } from './../store/TagStore';
+
 
 export const SelectForm = observer(() => {
-    const { postStore, tagStore }: { postStore: PostStore; tagStore: TagStore; } = useContext<ViewStore>(viewStoreContext);
+    const store = useContext<ViewStore>(viewStoreContext);
+    const { postStore, tagStore }: { postStore: PostStore; tagStore: TagStore; } = store;
 
     useEffect(() => {
         // mobx only rerenders if item is directly accessed. Not through for example .map. 
     }, [tagStore.tags])
 
-    const onSubmit = ({ post, tag }) => {
-        // Not sure what to do here for now
+    const onSubmit = ({ tag, post }) => {
+        store.celebrateAndResetForms(tag, post)
     };
 
     // Simple validation rule, both values are required strings
@@ -33,9 +35,13 @@ export const SelectForm = observer(() => {
 
     return (
         <StyledFormik>
-            <Formik onSubmit={onSubmit} initialValues={initialValues} validationSchema={validationSchema}
-                render={props =>
-                    (<StyledForm>
+            <Formik
+                onSubmit={onSubmit}
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                render={props => {
+                    store.resetForm = props.resetForm;
+                    return (<StyledForm>
                         <div className="top">
                             <Field name="tag" component="select" placeholder="pick one side" onChange={(event: { target: { value: string; }; }) => {
                                 tagStore.setSelectedTag(event.target.value);
@@ -45,6 +51,7 @@ export const SelectForm = observer(() => {
                                 {tagStore.tags.map(tag => <option key={`tag:${tag.slug}`} value={tag.slug}>{tag.name}</option>)}
                             </Field>
                             <ErrorMessage name="tag" >{msg => <div className="validation-error">{msg}</div>}</ErrorMessage>
+
                             {postStore && <div>
                                 <Field name="post" component="select" onChange={e => {
                                     postStore.setSelectedPost(e.target.value);
@@ -56,10 +63,13 @@ export const SelectForm = observer(() => {
                                 <ErrorMessage name="post" >{msg => <div className="validation-error">{msg}</div>}</ErrorMessage>
                             </div>}
                         </div>
+
                         <div className="bottom">
                             <button disabled={!props.isValid} type="submit">Submit</button>
                         </div>
-                    </StyledForm>)}
+
+                    </StyledForm>)
+                }}
             />
         </StyledFormik>);
 });

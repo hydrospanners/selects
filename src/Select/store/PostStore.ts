@@ -1,15 +1,14 @@
 import { action, autorun, observable } from 'mobx';
 
 import { Post } from './Post';
-import { ViewStore } from './ViewStore';
+import { ViewStore } from './SelectViewStore';
 
 export class PostStore {
     constructor(private viewStore: ViewStore, private selectedTagSlug: string) { }
     
     @observable posts: Post[] = [];
-    // i don't need to use this disposer, but let's say it was a webSocket or something i could use this method to gracfully close connections perhaps
     private disposer = autorun(async () => {
-        const response = await fetch(`api/tag/${this.selectedTagSlug}`);
+        const response = await fetch(`/api/tag/${this.selectedTagSlug}`);
         const json = await response.json();
         this.posts = json.data.data;
     });

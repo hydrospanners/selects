@@ -8,10 +8,23 @@ import { TagStore } from './TagStore';
 
 
 class ViewStore {
+    resetForm: () => void;
+    celebrateAndResetForms(tag: string, post: string) {
+
+        this.resetForm();
+        this.tagStore.setSelectedTag('');
+        this.viewHistory.push({ tag, post })
+    }
+    @observable viewHistory: { tag: string, post: string }[] = [];
+
     @observable postStore: PostStore;
-    tagStore: TagStore; // the object itself does not need 
+    tagStore: TagStore; // the object itself does not need to be observable
 
     createTagStore(tag: string) {
+        if (tag == '') {
+            this.postStore = undefined;
+            return;
+        }
         this.postStore = new PostStore(this, tag);
     }
 
@@ -20,7 +33,9 @@ class ViewStore {
         ret.tagStore = new TagStore(ret);
         return ret;
     }
+
+
 }
 
-export { ViewStore, Post, Tag, PostStore, TagStore }
+export { ViewStore }
 export default createContext(ViewStore.Create());

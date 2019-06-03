@@ -1,9 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
+
+// I had an idea for a router thing, but i did not follow through. Will leave the code here though in case i change my mind. 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import Select from './Select';
+import Select from '../Select';
 import { createGlobalStyle } from 'styled-components'
+
 const GlobalStyles = createGlobalStyle`
     body {
         margin:0; 

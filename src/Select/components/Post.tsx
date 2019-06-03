@@ -3,8 +3,9 @@ import React from 'react';
 import { useContext } from 'react';
 import styled from 'styled-components';
 
-import viewStoreContext, { PostStore, ViewStore } from '../store/ViewStore';
-import { Window } from './Window'
+import { Window } from '../../components/Window';
+import { PostStore } from './../store/PostStore';
+import viewStoreContext, { ViewStore } from './../store/SelectViewStore';
 
 export const Post = observer(() => {
     const { postStore }: {

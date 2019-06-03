@@ -1,6 +1,6 @@
 import { observable, autorun } from 'mobx';
 import { Tag } from './Tag';
-import { ViewStore } from './ViewStore';
+import { ViewStore } from './SelectViewStore';
 export class TagStore {
     constructor(private viewStore: ViewStore) {
     }
