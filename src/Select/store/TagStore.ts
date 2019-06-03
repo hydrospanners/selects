@@ -1,18 +1,21 @@
-import { observable, autorun } from 'mobx';
-import { Tag } from './Tag';
+import { autorun, observable } from 'mobx';
+
 import { ViewStore } from './SelectViewStore';
+import { Tag } from './Tag';
+
 export class TagStore {
-    constructor(private viewStore: ViewStore) {
-    }
-    @observable
-    tags: Tag[] = [];
+    constructor(private viewStore: ViewStore) { }
+
+    @observable tags: Tag[] = [];
+    private disposer = autorun(() => this.fetchTags());
     private async fetchTags() {
         const response = await fetch('/api/tag');
         const json = await response.json();
         this.tags = json.data.data;
     }
-    private disposer = autorun(() => this.fetchTags());
+    
     setSelectedTag(tagSlug: string) {
-        this.viewStore.createTagStore(tagSlug);
+        // when a tag has been selected, the post store can be initated by the view store. 
+        this.viewStore.createPostStore(tagSlug);
     }
 }

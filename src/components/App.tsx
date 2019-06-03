@@ -1,11 +1,9 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-
-// I had an idea for a router thing, but i did not follow through. Will leave the code here though in case i change my mind. 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { createGlobalStyle } from 'styled-components';
 
 import Select from '../Select';
-import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyles = createGlobalStyle`
     body {
@@ -15,8 +13,7 @@ const GlobalStyles = createGlobalStyle`
         @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
         font-family: 'Roboto', sans-serif;
         color: #444;
-        font-size: 32px;
-
+        font-size: 18px;
     }
 `;
 
@@ -25,6 +22,7 @@ export const App = observer(() => {
     return (
         <>
             <GlobalStyles />
+            {/* I had some idea about using routes, but i ran out of time. Sorry */}
             <Router>
                 <Switch>
                     <Route component={Select} />

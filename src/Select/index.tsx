@@ -1,23 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-import { Window } from './../components/Window';
-import { HorribleGreenBox } from './components/HorribleGreenBox';
-import { Post } from './components/Post';
+import { CurrentPost } from './components/CurrentPost';
 import { SelectForm } from './components/SelectForm';
+import { ViewHistory } from './components/ViewHistory';
 
-export default () => {
-    useEffect(() => {
-    }, [])
-    return (
-        <StyledPostMain>
-            <SelectForm />
-            <Post />
-            <HorribleGreenBox />
-        </StyledPostMain>
-
-    )
-}
+export default () => (
+    <StyledPostMain>
+        <SelectForm />
+        <CurrentPost />
+        <ViewHistory />
+    </StyledPostMain>
+);
 
 const StyledPostMain = styled.main`
     display: grid; 
@@ -27,10 +21,3 @@ const StyledPostMain = styled.main`
 
     height: 100vh; 
 `;
-
-export const StyledEmptyWindow = styled(Window)`
-    grid-row: 2;
-    grid-column:1/2;
-    background-color: #71ba7a;
-`
-

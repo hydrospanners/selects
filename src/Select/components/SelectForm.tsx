@@ -65,7 +65,7 @@ export const SelectForm = observer(() => {
                         </div>
 
                         <div className="bottom">
-                            <button disabled={!props.isValid} type="submit">Submit</button>
+                            <button disabled={!props.isValid} type="submit">View Post</button>
                         </div>
 
                     </StyledForm>)
@@ -79,28 +79,39 @@ const StyledFormik = styled(Window)`
     grid-column:1/2;
 `;
 
-
 const StyledForm = styled(Form)`
-  height: 100%; 
-  display: flex;
-  flex-direction:column; 
-  .top {
-      flex-grow: 1; 
-  }
-  .bottom {
-      button {
-          float:right;
-      }
-  }
+    height: 100%; 
+    display: flex;
+    flex-direction:column; 
+
+    .top {
+        flex-grow: 1; 
+    }
+
+    .bottom {
+        button {
+            float:right;
+        }
+    }
+
+    .validation-error {
+        color:#fff;
+        font-size:0.8em; 
+        &:before {
+            content: '*';
+            padding-right: 0.5em; 
+            color: red; 
+        }
+    }
 
     /* credit: https://css-tricks.com/styling-a-select-like-its-2019/*/
     select,button[type="submit"] {
         display: block;
         font-family: 'Roboto', sans-serif;
-        font-size: 1rem;
+        font-size: 1em;
         font-weight: 700;
         line-height: 1.3;
-        padding: .6rem 1.4rem .5rem .8rem;
+        padding: .6em 1.4em .5em .8em;
         max-width: 100%; 
         box-sizing: border-box;
         margin: 0;
@@ -139,15 +150,6 @@ const StyledForm = styled(Form)`
     }
     select option {
         font-weight:normal;
-    }
-    .validation-error {
-        color:#fff;
-        font-size:0.8rem; 
-        &:before {
-            content: '*';
-            padding-right: 0.5rem; 
-            color: red; 
-        }
     }
 `;
 

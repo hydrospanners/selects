@@ -1,9 +1,11 @@
-import React, { useContext } from 'react';
 import { observer } from 'mobx-react-lite';
-import { StyledEmptyWindow } from '../index';
+import React, { useContext } from 'react';
+import styled from 'styled-components';
+
+import { Window } from '../../components/Window';
 import ViewStoreContext, { ViewStore } from '../store/SelectViewStore';
 
-export const HorribleGreenBox = observer(() => {
+export const ViewHistory = observer(() => {
     const store = useContext<ViewStore>(ViewStoreContext);
     return (
         <StyledEmptyWindow>
@@ -11,3 +13,10 @@ export const HorribleGreenBox = observer(() => {
         </StyledEmptyWindow>
     );
 });
+
+export const StyledEmptyWindow = styled(Window)`
+    grid-row: 2;
+    grid-column:1/2;
+    background-color: #71ba7a;
+    font-size:12px;
+`
